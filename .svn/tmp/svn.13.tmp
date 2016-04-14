@@ -1,0 +1,53 @@
+/**
+ * 
+ */
+package com.cmsz.ck.service.impl;
+
+import java.util.Properties;
+
+import org.springframework.stereotype.Service;
+
+import com.cmsz.ck.model.KafkaModel;
+import com.cmsz.ck.service.KafkaService;
+
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;
+import scala.actors.threadpool.ExecutorService;
+import scala.actors.threadpool.Executors;
+
+/**
+ * @author oysj
+ *
+ */
+@Service
+public class KafkaServiceImpl implements KafkaService {
+    private static ExecutorService executorService = Executors.newCachedThreadPool();
+
+    @Override
+    public int sendMsgToKafka(KafkaModel kafkaModel) throws Exception {
+        KafkaRunnable runnable = new KafkaRunnable(kafkaModel);
+        executorService.execute(runnable);
+        return 0;
+    }
+
+    private class KafkaRunnable implements Runnable {
+        private KafkaModel kafkaModel;
+        private Producer<Integer, String> producer;
+        private Properties props = new Properties();
+
+        public KafkaRunnable(KafkaModel kafkaModel) {
+            this.kafkaModel = kafkaModel;
+            props.put("serializer.class", "kafka.serializer.StringEncoder");
+            props.put("metadata.broker.list", "192.168.1.199:9092");
+            producer = new Producer<Integer, String>(new ProducerConfig(props));
+        }
+
+        @Override
+        public void run() {
+            // 将消息发送到kafka服务器
+            producer.send(new KeyedMessage<Integer, String>(kafkaModel.getTopic(),
+                    kafkaModel.getTextContent()));
+        }
+    }
+}

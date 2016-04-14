@@ -1,0 +1,91 @@
+/**
+ * 
+ */
+package com.cmsz.ck.runnable;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+
+import kafka.consumer.Consumer;
+import kafka.consumer.ConsumerConfig;
+import kafka.consumer.ConsumerIterator;
+import kafka.consumer.KafkaStream;
+import kafka.javaapi.consumer.ConsumerConnector;
+
+/**
+ * @author oysj
+ *
+ */
+public class MessageSocket implements Runnable {
+	private Socket socket;
+	private PrintWriter pw;
+	private InetAddress addr;
+	private ConsumerConnector consumer;
+	private String topic ="abc";
+	public MessageSocket(Socket socket) {
+		this.socket = socket;
+		addr = socket.getInetAddress();
+		consumer  = Consumer.createJavaConsumerConnector(createConsumerConfig());
+	}
+	@Override
+	public void run() {
+		try {
+			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
+			Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
+			topicCountMap.put(topic, new Integer(1));
+			Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
+			KafkaStream<byte[], byte[]> stream = consumerMap.get(topic).get(0);
+			ConsumerIterator<byte[], byte[]> it = stream.iterator();
+			testAlive();
+			loop:
+				while(it.hasNext()){
+					String str = new String(it.next().message());
+					pw.print(str);
+					System.out.println(str);
+				}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	private static ConsumerConfig createConsumerConfig(){
+		Properties props = new Properties();
+		props.put("zookeeper.connect", "192.168.1.199:2181");
+		props.put("group.id", "group2");
+		props.put("zookeeper.session.timeout.ms", "40000");
+		props.put("zookeeper.sync.time.ms", "200");
+		props.put("auto.commit.interval.ms", "500");
+		return new ConsumerConfig(props);
+	}
+	private void testAlive(){
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				while(socket.isConnected()){
+					try {
+						Thread.sleep(2000);
+						continue;
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						try {
+							socket.close();
+							pw.close();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		t.start();
+	}
+}

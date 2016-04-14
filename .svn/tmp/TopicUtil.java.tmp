@@ -1,0 +1,96 @@
+package com.cmsz.ck.util;
+
+import com.cmsz.ck.kafka.KafkaConsumer;
+import com.cmsz.ck.kafka.KafkaProducer;
+
+import kafka.admin.DeleteTopicCommand;
+import kafka.admin.TopicCommand;
+
+public class TopicUtil {
+	public static void main(String[] args) {
+		queryTopics("192.168.1.199:2181");
+	}
+	/** 查询所以主题 */
+	public static void queryTopics(String zookeeperAddr) {
+		String[] options = new String[] { "--list", "--zookeeper", zookeeperAddr };
+		TopicCommand.main(options);
+	}
+
+<<<<<<< .mine
+  /** 查询所以主题 */
+  public static void queryTopics(String zookeeperAddrAndPort) {
+    String[] options = new String[] {
+        "--list", 
+        "--zookeeper", zookeeperAddrAndPort};
+    TopicCommand.main(options);
+  }
+=======
+	/** 创建主题 */
+	public static void createTopic(String zookeeperAddr, String topicName) {
+		String[] options = new String[] { "--create", "--zookeeper", zookeeperAddr, "--partitions", "20", "--topic",
+				topicName, "--replication-factor", "1" };
+		TopicCommand.main(options);
+	}
+>>>>>>> .r3153
+
+<<<<<<< .mine
+  /** 创建主题 */
+  public static void createTopic(String zookeeperAddr, String topicName) {
+    String[] options = new String[] {
+        "--create", 
+        "--zookeeper", zookeeperAddr, 
+        "--partitions", "20", 
+        "--topic",topicName, 
+        "--replication-factor", "1"};
+    TopicCommand.main(options);
+    KafkaConsumer consumerThread = new KafkaConsumer(topicName);
+    KafkaProducer producerThread = new KafkaProducer(topicName);
+    consumerThread.start();
+    producerThread.start();
+    while(true){
+        if(consumerThread.message!=null && !consumerThread.message.equals("")){
+            try{
+                consumerThread.interrupt();
+                producerThread.interrupt();
+            }catch(Exception e){
+                System.err.println("创建完topic后，线程打断！");
+            }
+            producerThread.quitFlag=true;
+            consumerThread.quitFlag = true;
+            break;
+        }
+        
+    }
+  }
+  
+  /**查询指定主题 */  
+  public static void detailTopic(String zookeeperAddr, String topicName) {  
+      String[] options = new String[] {   
+              "--describe",   
+              "--zookeeper",zookeeperAddr,   
+              "--topic", topicName };  
+      TopicCommand.main(options);  
+  }
+  
+  /** 删除主题 */
+  public static void delTopic(String zookeeperAddr, String topicName) {  
+    String[] options = new String[] {
+        "--zookeeper", zookeeperAddr, 
+        "--topic", topicName};
+     DeleteTopicCommand.main(options);
+  }
+=======
+	/** 查询指定主题 */
+	public static void detailTopic(String zookeeperAddr, String topicName) {
+		String[] options = new String[] { "--describe", "--zookeeper", zookeeperAddr, "--topic", topicName };
+		TopicCommand.main(options);
+	}
+
+	/** 删除主题 */
+	public static void delTopic(String zookeeperAddr, String topicName) {
+		String[] options = new String[] { "--zookeeper", zookeeperAddr, "--topic", topicName };
+		DeleteTopicCommand.main(options);
+	}
+>>>>>>> .r3153
+
+}

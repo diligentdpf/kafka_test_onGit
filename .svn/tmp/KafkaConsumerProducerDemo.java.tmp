@@ -1,0 +1,36 @@
+package com.cmsz.ck.kafka;
+
+<<<<<<< .mine
+import com.cmsz.ck.util.TopicUtil;
+
+=======
+>>>>>>> .r3153
+public class KafkaConsumerProducerDemo {
+<<<<<<< .mine
+    public static void main(String[] args) {
+
+
+
+        String topicName = "duocaiguide";
+        // TopicUtil.queryTopics("192.168.1.199"+":"+"2181");
+       // TopicUtil.createTopic("192.168.1.199" + ":" + "2181", topicName);
+      // TopicUtil.queryTopics("192.168.1.199" + ":" + "2181");
+        // KafkaProducer producerThread = new KafkaProducer(KafkaProperties.topic);
+        // producerThread.start();
+       KafkaConsumer consumerThread = new KafkaConsumer(topicName);
+        consumerThread.start();
+
+
+    }
+=======
+	public static void main(String[] args) {
+		/*
+		 * KafkaProducer producerThread = new
+		 * KafkaProducer(KafkaProperties.topic); producerThread.start();
+		 */
+		KafkaConsumer consumerThread = new KafkaConsumer("abc");
+		consumerThread.start();
+	}
+>>>>>>> .r3153
+
+}

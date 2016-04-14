@@ -1,0 +1,38 @@
+/**
+ * 
+ */
+package com.cmsz.ck.runnable;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+
+/**
+ * @author oysj
+ *
+ */
+public class SendMessageServer implements Runnable {
+	private ServerSocket server;
+	private PrintWriter pw;
+
+	public SendMessageServer() {
+		try {
+			server = new ServerSocket(8088);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void run() {
+		while(true){
+			try {
+				Socket socket = server.accept();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+}

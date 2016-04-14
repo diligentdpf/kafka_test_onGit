@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EclipseCodeFormatter">
+    <option name="defaultSettings" value="true" />
+    <option name="enableGWT" value="true" />
+    <option name="enableJSFormatting" value="true" />
+    <option name="id" value="1400745111817" />
+    <option name="name" value="default" />
+    <option name="pathToConfigFileJS" value="E:/soft/eclipse/eclipse-javascript-google-style.xml" />
+    <option name="pathToConfigFileJava" value="E:/soft/eclipse/eclipse-java-google-style.xml" />
+    <option name="selectedJavaProfile" value="GoogleStyle" />
+    <option name="selectedJavaScriptProfile" value="Google JavaScript Style" />
+  </component>
+  <component name="ProjectRootManager" version="2" />
+  <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="trunkUrl" value="" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
+</project>
+

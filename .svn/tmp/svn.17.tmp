@@ -1,0 +1,43 @@
+/**
+ * 
+ */
+package com.cmsz.ck.service.impl;
+
+import java.net.Socket;
+import java.util.Properties;
+
+import org.springframework.stereotype.Service;
+
+import com.cmsz.ck.listener.Test;
+import com.cmsz.ck.model.KafkaModel;
+import com.cmsz.ck.runnable.KafkaRunnable;
+import com.cmsz.ck.runnable.SendMessageServer;
+import com.cmsz.ck.service.KafkaService;
+
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;
+import scala.actors.threadpool.ExecutorService;
+import scala.actors.threadpool.Executors;
+
+/**
+ * @author oysj
+ *
+ */
+@Service
+public class KafkaServiceImpl implements KafkaService {
+	private ExecutorService executorService = Executors.newCachedThreadPool();
+	private SendMessageServer sendMessageSocket = new SendMessageServer();
+
+	public KafkaServiceImpl() {
+		Thread t = new Thread(sendMessageSocket);
+		t.start();
+	}
+	
+	@Override
+	public int sendMsgToKafka(KafkaModel kafkaModel) throws Exception {
+		KafkaRunnable runnable = new KafkaRunnable(kafkaModel);
+		executorService.execute(runnable);
+		return 0;
+	}
+}

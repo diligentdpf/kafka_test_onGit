@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package com.cmsz.ck.dao;
+
+/**
+ * @author oysj
+ *
+ */
+public interface KafkaDao {
+
+}

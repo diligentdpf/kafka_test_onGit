@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cmsz.ck.dao.KafkaDao" >
+	<select id="checkAndReturnUserInfo" parameterType="string" resultType="UserModel">
+		select userId,userName,topic
+		from user
+		where userId = #{userId}
+	</select>
+	<insert id="saveMessage" parameterType="java.util.HashMap">
+		insert into 
+		lettertable(letterContent,letterTime,topic)
+		values
+		(#{letterContent},#{letterTime},#{topic})
+	</insert>
+</mapper>

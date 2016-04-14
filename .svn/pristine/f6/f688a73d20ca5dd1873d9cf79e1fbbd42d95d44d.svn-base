@@ -1,0 +1,39 @@
+/**
+ * 
+ */
+package com.cmsz.ck.service.impl;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
+import com.cmsz.ck.model.KafkaModel;
+import com.cmsz.ck.runnable.KafkaRunnable;
+import com.cmsz.ck.runnable.SendMessageServer;
+import com.cmsz.ck.service.KafkaService;
+
+import scala.actors.threadpool.ExecutorService;
+import scala.actors.threadpool.Executors;
+
+/**
+ * @author oysj
+ *
+ */
+@Service
+@Scope("singleton")
+public class KafkaServiceImpl implements KafkaService {
+	private ExecutorService executorService = Executors.newCachedThreadPool();
+	private SendMessageServer sendMessageSocket = new SendMessageServer();
+
+	public KafkaServiceImpl() {
+		System.out.println("=======================================================================================================");
+		Thread t = new Thread(sendMessageSocket);
+		t.start();
+	}
+	
+	@Override
+	public int sendMsgToKafka(KafkaModel kafkaModel) throws Exception {
+		KafkaRunnable runnable = new KafkaRunnable(kafkaModel);
+		executorService.execute(runnable);
+		return 0;
+	}
+}

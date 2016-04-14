@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package com.cmsz.ck.service;
+
+import com.cmsz.ck.model.KafkaModel;
+
+/**
+ * @author oysj
+ *
+ */
+public interface KafkaService {
+	/** 发送数据到Kafka服务器 */
+	int sendMsgToKafka(KafkaModel kafkaModel)throws Exception;
+}
